@@ -19,6 +19,7 @@ from keras.applications.xception import preprocess_input
 from keras.applications.xception import decode_predictions
 from keras.models import load_model
 import streamlit as st
+from werkzeug.utils import secure_filename
 import h5py
 
 #loading model
@@ -69,8 +70,12 @@ def main():
             raise Exception("image not uploaded, please refresh page and upload the image")
         st.write("")
         st.write("Classifying...")
-        uploaded_file = str(uploaded_file)
-        label = predict(uploaded_file)
+        #save the file to uploads
+        basepath = os.path.dirname(__file__)
+        file_path = os.path.join(
+            basepath, 'uploads', secure_filename(uploaded_file.filename))
+        uploaded_file.save(file_path)
+        label = predict(file_path)
         st.write('%s (%.2f%%)' % (label[1], label[2]*100))
     hide_streamlit_style ="""
         <style>

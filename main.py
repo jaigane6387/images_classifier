@@ -12,7 +12,7 @@ import io
 import os
 import numpy as np
 import keras
-from PIL import Image
+from PIL import Image , ImageOps
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 from keras.applications.xception import preprocess_input
@@ -28,12 +28,14 @@ model = load_model('xception_model')
 model._make_predict_function() 
 
 def predict(image1): 
-    image = load_img(image1, target_size=(299, 299)) #for xception it expects 299x299 size
+    image = image1
+    size=(229,229) #for xception it expects 299x299 size
+    image = ImageOps.fit(image, size)
     # convert the image pixels to a numpy array
     image = img_to_array(image)
     # reshape data for the model
     image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-    # prepare the image for the VGG model
+    # prepare the image for the xception model
     image = preprocess_input(image)
     # predict the probability across all output classes
     yhat = model.predict(image)
@@ -63,19 +65,14 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...",type=['jpg','png','jpeg'])
     
     if uploaded_file is not None:
-        image = Image.open(uploaded_file,mode='r')
+        image = Image.open(uploaded_file)
         st.image(image, caption='Uploaded Image.', use_column_width=True)
     if st.button("Predict"):
         if uploaded_file is None:
             raise Exception("image not uploaded, please refresh page and upload the image")
         st.write("")
         st.write("Classifying...")
-        #save the file to uploads
-        basepath = os.path.dirname(__file__)
-        file_path = os.path.join(
-            basepath, 'uploads', secure_filename(uploaded_file.filename))
-        uploaded_file.save(file_path)
-        label = predict(file_path)
+        label = predict(image)
         st.write('%s (%.2f%%)' % (label[1], label[2]*100))
     hide_streamlit_style ="""
         <style>

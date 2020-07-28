@@ -29,7 +29,7 @@ model._make_predict_function()
 
 def predict(image1): 
     image = image1
-    size=(229,229) #for xception it expects 299x299 size
+    size=(299,299) #for xception it expects 299x299 size
     image = ImageOps.fit(image, size)
     # convert the image pixels to a numpy array
     image = img_to_array(image)

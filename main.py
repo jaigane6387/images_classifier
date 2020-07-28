@@ -8,6 +8,8 @@ Created on Mon Jul 27 08:04:26 2020
 
 #importing required libraries
 import tensorflow
+import io
+import os
 import numpy as np
 import keras
 from PIL import Image
@@ -60,14 +62,15 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...")
     
     if uploaded_file is not None:
-        image = Image.open(uploaded_file)
+        image = Image.open(uploaded_file,mode='r')
         st.image(image, caption='Uploaded Image.', use_column_width=True)
     if st.button("Predict"):
         if uploaded_file is None:
             raise Exception("image not uploaded, please refresh page and upload the image")
         st.write("")
         st.write("Classifying...")
-        label = predict(uploaded_file)
+        with open(uploaded_file, 'rb') as f:
+            label = predict(f)
         st.write('%s (%.2f%%)' % (label[1], label[2]*100))
     hide_streamlit_style ="""
         <style>

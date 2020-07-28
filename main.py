@@ -59,7 +59,7 @@ def main():
     """
     st.markdown(html_temp,unsafe_allow_html=True)
     st.set_option('deprecation.showfileUploaderEncoding',False)
-    uploaded_file = st.file_uploader("Choose an image...")
+    uploaded_file = st.file_uploader("Choose an image...",type=['jpg','png','jpeg'])
     
     if uploaded_file is not None:
         image = Image.open(uploaded_file,mode='r')
@@ -69,8 +69,8 @@ def main():
             raise Exception("image not uploaded, please refresh page and upload the image")
         st.write("")
         st.write("Classifying...")
-        with open(uploaded_file, 'rb') as f:
-            label = predict(f)
+        uploaded_file = str(uploaded_file)
+        label = predict(uploaded_file)
         st.write('%s (%.2f%%)' % (label[1], label[2]*100))
     hide_streamlit_style ="""
         <style>

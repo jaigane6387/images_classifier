@@ -3,7 +3,7 @@ numpy==1.15.2
 pillow==8.3.2
 h5py==2.8.0
 keras==2.3.1
-streamlit==0.64.0
+streamlit==1.11.1
 werkzeug==0.15.3
 
 

@@ -4,7 +4,7 @@ pillow==8.3.2
 h5py==2.8.0
 keras==2.3.1
 streamlit==0.64.0
-werkzeug==0.15.3
+werkzeug==2.2.3
 
 
 
